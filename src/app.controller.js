@@ -8,6 +8,7 @@ import cors from "cors";
 const boot = async (app, express) => {
   app.use(cors());
   await connectDB();
+  app.use("/uploads", express.static("uploads"));
   app.use(express.json());
   app.get("/", (req, res, next) => {
     return res

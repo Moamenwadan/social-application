@@ -98,3 +98,17 @@ export const shareProfile = asyncHandler(async (req, res, next) => {
       })
     : next(new Error("Invalid account Id", { cause: 404 }));
 });
+export const updateProfilePicture = asyncHandler(async (req, res, next) => {
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      profilePicture: req.file.path,
+    },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+  if (!user) return next(new Error("the user doesn't exist", { cause: 404 }));
+  return res.status(200).json(user);
+});

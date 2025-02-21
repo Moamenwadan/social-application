@@ -3,8 +3,9 @@ import * as userService from "./user.service.js";
 import isAuthuenticated from "../../middleware/auth.middleware.js";
 import isAuthorized from "../../middleware/authorization.middleware.js";
 import { roles } from "../../DB/models/user.model.js";
-import validation from "../../middleware/validation.midddleware.js";
+import { validation } from "../../middleware/validation.midddleware.js";
 import * as userSchemaValidation from "./user.validation.js";
+import upload from "../../utils/fileUploads/multerUploading.js";
 const router = Router();
 // add user
 // router.post("/", userService.addUser);
@@ -38,6 +39,13 @@ router.get(
   "/:userId",
   validation(userSchemaValidation.shareProfile),
   userService.shareProfile
+);
+router.post(
+  "/profilePicture",
+  isAuthuenticated,
+  upload().single("image"),
+  // validation(userSchemaValidation.shareProfile),
+  userService.updateProfilePicture
 );
 
 export default router;

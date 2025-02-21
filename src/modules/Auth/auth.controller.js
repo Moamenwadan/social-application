@@ -12,7 +12,7 @@ import {
   // loginWithGmail,
 } from "./auth.service.js";
 import isAuthuenticated from "../../middleware/auth.middleware.js";
-import validation from "../../middleware/validation.midddleware.js";
+import { validation } from "../../middleware/validation.midddleware.js";
 import * as authSchema from "./auth.validation.js";
 const router = Router();
 

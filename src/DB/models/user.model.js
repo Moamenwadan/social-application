@@ -38,6 +38,7 @@ const userSchema = new Schema(
     deleted: { type: Boolean, default: false },
     provider: { type: String, enum: Object.values(providers) },
     tempEmail: { type: String },
+    profilePicture: { type: String },
   },
   { timestamps: true }
 );
