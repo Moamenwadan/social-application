@@ -12,7 +12,7 @@ import { generateToken, verifyToken } from "../../utils/token/token.js";
 import Randomstring from "randomstring";
 import OTP from "../../DB/models/otp.model.js";
 import sendEmail from "../../utils/emails/sendEmail.js";
-import { signup } from "../../utils/emails/generateHTML.js";
+import { signup, verifyEmail } from "../../utils/emails/generateHTML.js";
 import { OAuth2Client } from "google-auth-library";
 
 export const generateOTP = asyncHandler(async (req, res, next) => {
@@ -184,5 +184,43 @@ export const new_access = asyncHandler(async (req, res, next) => {
     success: true,
     message: "new access successfully ",
     access_token,
+  });
+});
+export const updateEmail = asyncHandler(async (req, res, next) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ _id: req.user._id });
+  if (!user) return next(new Error("the user doesn't exist", { cause: 404 }));
+  if (!compareHash({ plainText: password, hashValue: user.password }))
+    return next(new Error("invalid password", { cause: 404 }));
+  const token = generateToken({ payload: { email: email, id: user._id } });
+  const url = `http://localhost:3000/auth/verifyEmail/${token}`;
+  await sendEmail({
+    to: email,
+    subject: "update email",
+    html: verifyEmail(url),
+  });
+  user.tempEmail = email;
+  await user.save();
+  return res.status(201).json({
+    success: true,
+    message: "give tempEmail value successfully",
+  });
+});
+export const verifyNewEmail = asyncHandler(async (req, res, next) => {
+  const { token } = req.params;
+  // console.log(token)
+  const decoded = verifyToken({ token });
+  const user = await User.findOne({
+    _id: decoded.id,
+    tempEmail: decoded.email,
+  });
+  if (!user) return next(new Error("the user doesn't exist", { cause: 404 }));
+
+  user.email = user.tempEmail;
+  user.tempEmail = null;
+  await user.save();
+  return res.status(201).json({
+    success: true,
+    message: "update email successfully",
   });
 });

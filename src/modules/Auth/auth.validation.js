@@ -24,15 +24,32 @@ export const generateOtpSchema = joi.object({
 export const forget_password = joi.object({
   email: joi.string().required(),
 });
-export const reset_password = joi.object({
-  otp: joi.string().required(),
-  password: joi.string().required(),
-  email: joi.string().required(),
-  confirmPassword: joi.string().valid(joi.ref("password")).required(),
-});
-export const new_access = joi.object({
-  token: joi.string().required(),
-});
-export const loginWithGmail = joi.object({
-  idToken: joi.string().required(),
-});
+export const reset_password = joi
+  .object({
+    otp: joi.string().required(),
+    password: joi.string().required(),
+    email: joi.string().required(),
+    confirmPassword: joi.string().valid(joi.ref("password")).required(),
+  })
+  .required();
+export const new_access = joi
+  .object({
+    token: joi.string().required(),
+  })
+  .required();
+export const loginWithGmail = joi
+  .object({
+    idToken: joi.string().required(),
+  })
+  .required();
+export const updateEmail = joi
+  .object({
+    email: joi.string().required(),
+    password: joi.string().required(),
+  })
+  .required();
+export const verifyNewEmail = joi
+  .object({
+    token: joi.string().required(),
+  })
+  .required();

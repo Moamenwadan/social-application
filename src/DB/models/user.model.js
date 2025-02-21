@@ -37,6 +37,7 @@ const userSchema = new Schema(
     changePasswordTime: { type: Date },
     deleted: { type: Boolean, default: false },
     provider: { type: String, enum: Object.values(providers) },
+    tempEmail: { type: String },
   },
   { timestamps: true }
 );
