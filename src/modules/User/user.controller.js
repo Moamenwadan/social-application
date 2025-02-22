@@ -52,5 +52,18 @@ router.delete(
   isAuthuenticated,
   userService.deleteProfilePicture
 );
+router.post(
+  "/profilePictureCloudinary",
+  isAuthuenticated,
+  upload().single("image"),
+  // validation(userSchemaValidation.shareProfile),
+  userService.addProfilePictureInCloudinary
+);
+router.delete(
+  "/deleteprofilePictureCloudinary",
+  isAuthuenticated,
+  // validation(userSchemaValidation.shareProfile),
+  userService.deleteProfilePictureInCloudinary
+);
 
 export default router;
