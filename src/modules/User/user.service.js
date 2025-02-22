@@ -1,9 +1,11 @@
-import User from "../../DB/models/user.model.js";
+import User, { defaultPicture } from "../../DB/models/user.model.js";
 import jwt from "jsonwebtoken";
 import CryptoJS from "crypto-js";
 import { decrypt, encrypt } from "../../utils/encryption/encryption.js";
 import { asyncHandler } from "../../utils/errorHandling/asyncHanler.js";
 import { compareHash, hash } from "../../utils/hashing/hash.js";
+import fs from "fs";
+import path from "path";
 export const profile = asyncHandler(async (req, res) => {
   let { user } = req;
   // const phone = CryptoJS.AES.decrypt(
@@ -110,5 +112,14 @@ export const updateProfilePicture = asyncHandler(async (req, res, next) => {
     }
   );
   if (!user) return next(new Error("the user doesn't exist", { cause: 404 }));
+  return res.status(200).json(user);
+});
+
+export const deleteProfilePicture = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user._id);
+  if (!user) return next(new Error("the user doesn't exist", { cause: 404 }));
+  fs.unlinkSync(path.resolve(".", user.profilePicture));
+  user.profilePicture = defaultPicture;
+  await user.save();
   return res.status(200).json(user);
 });

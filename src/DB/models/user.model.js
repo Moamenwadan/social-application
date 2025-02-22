@@ -13,7 +13,8 @@ export const providers = {
   system: "system",
   google: "google",
 };
-
+export const defaultPicture =
+  "uploads\\users\\kYNl8hxPfGVWVFLZ7Xst7_default_picture.png";
 const userSchema = new Schema(
   {
     userName: { type: String, minLength: 4, maxLength: 20, required: true },
@@ -38,7 +39,7 @@ const userSchema = new Schema(
     deleted: { type: Boolean, default: false },
     provider: { type: String, enum: Object.values(providers) },
     tempEmail: { type: String },
-    profilePicture: { type: String },
+    profilePicture: { type: String, default: defaultPicture },
   },
   { timestamps: true }
 );

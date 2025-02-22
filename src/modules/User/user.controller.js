@@ -47,5 +47,10 @@ router.post(
   // validation(userSchemaValidation.shareProfile),
   userService.updateProfilePicture
 );
+router.delete(
+  "/deleteProfilePicture",
+  isAuthuenticated,
+  userService.deleteProfilePicture
+);
 
 export default router;
